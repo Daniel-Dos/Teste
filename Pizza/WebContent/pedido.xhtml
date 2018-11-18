@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+	<title>Pizzaria do Império</title>
+    <link rel="stylesheet" type="text/css" href="css/ladoNegro.css" />
+</h:head>
+
+<body>
+	<div class="cabecalho"></div>
+    <div class="conteudo">
+    
+    <br />
+    <h:link styleClass="menuItem" value="Novo Pedido" outcome="pedido" /> | 
+    <h:link styleClass="menuItem" value="Pedidos Cadastrados" outcome="pedidos" /> | 
+    <h:link styleClass="menuItem" value="Clientes" outcome="clientes" />
+    <br />
+      
+    <h1>CADASTRO DE ITEM AO PEDIDO</h1>
+
+	<h:form>
+		<h:messages styleClass="message" layout="table" />
+		
+		Telefone:<br />
+		<h:inputText value="#{pedidoBean.telefone}" /><br /><br />
+		<h:commandButton value="Buscar" action="#{pedidoBean.buscarCliente}" />
+		
+		<br></br>
+		
+		<h:panelGroup rendered="#{pedidoBean.cliente != null}">
+			<h2>#{pedidoBean.cliente.nome}. #{pedidoBean.cliente.endereco.completo()}</h2>
+			
+			Sabor:<br />
+			<h:selectManyListbox value="#{pedidoBean.selectedSabores}">
+				<f:selectItems value="#{pedidoBean.sabores}" var="s" itemValue="#{s.id}" itemLabel="#{s.nome}" />
+			</h:selectManyListbox><br /><br />
+			
+			Tamanho:<br />
+			<h:selectOneMenu value="#{pedidoBean.tamanho}">
+				<f:selectItems value="#{pedidoBean.tamanhos}" />
+			</h:selectOneMenu><br /><br />
+			
+			Borda Recheada:<br />
+			<h:selectBooleanCheckbox value="#{pedidoBean.bordaRecheada}" /><br /><br />
+			
+			<h:commandButton value="Adicionar ao Pedido" action="#{pedidoBean.adicionarPizza}" /><br /><br />
+			
+			<h:dataTable value="#{pedidoBean.pizzas}" var="p" binding="#{table}">
+				<h:column>
+					<f:facet name="header">#</f:facet>
+					#{table.rowIndex + 1}
+				</h:column>
+				<h:column>
+					<f:facet name="header">Tamanho</f:facet>
+					#{p.tamanho}
+				</h:column>
+				<h:column>
+					<f:facet name="header">Sabores</f:facet>
+					<ui:repeat var="s" value="#{p.sabores}">
+						#{s.nome}<br />
+					</ui:repeat>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Borda</f:facet>
+					#{p.bordaRecheada ? "Sim" : "Não" }
+				</h:column>
+				<h:column>
+					<f:facet name="header">Preço</f:facet>
+					<h:outputText value="#{p.preco}">
+						<f:convertNumber type="currency" locale="pt_BR" />
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<h:commandButton action="#{pedidoBean.excluir(p.id)}" value="Excluir" />
+				</h:column> 
+			</h:dataTable>
+			
+			<br /><h:commandButton value="Confirmar Pedido" action="#{pedidoBean.confirmarPedido}" /><br /><br />
+		</h:panelGroup>
+	</h:form>
+	
+	</div>
+    <div class="rodape"></div>
+</body>
+</html>

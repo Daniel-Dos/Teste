@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+	<title>Pizzaria do Império</title>
+	<link rel="stylesheet" type="text/css" href="css/ladoNegro.css" />
+</h:head>
+
+<body>
+	<div class="cabecalho"></div>
+    <div class="conteudo">
+    
+    <br />
+    <h:link styleClass="menuItem" value="Novo Pedido" outcome="pedido" /> | 
+    <h:link styleClass="menuItem" value="Pedidos Cadastrados" outcome="pedidos" /> | 
+    <h:link styleClass="menuItem" value="Clientes" outcome="clientes" />
+    <br />
+    
+    <h1>PEDIDOS</h1>
+
+	<h:form>
+		<h:dataTable var="p" value="#{pedidoBean.pedidos}">
+			<h:column>
+				<f:facet name="header">Cliente</f:facet>
+				#{p.cliente.nome}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Data</f:facet>
+				<h:outputText value="#{p.data}">
+					<f:convertDateTime pattern="dd/MM - HH:mm" type="localDateTime" />
+				</h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Preço</f:facet>
+				<h:outputText value="#{p.preco}">
+					<f:convertNumber type="currency" locale="pt_BR" />
+				</h:outputText>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Status</f:facet>
+				#{p.status}
+			</h:column>
+			<h:column>
+				<h:commandButton value="Entregue" rendered="#{p.status != 'Entregue'}" />
+				<h:outputText value="#{p.status}" rendered="#{p.status == 'Entregue'}" />
+			</h:column>
+		</h:dataTable>
+	</h:form>
+	</div>
+    <div class="rodape"></div>
+</body>
+</html>
